@@ -1,0 +1,458 @@
+<html lang="ar" dir="rtl">
+<head>
+
+    <meta charset="UTF-8"></meta>
+
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"></meta>
+
+    <title>اختبار إلكتروني</title>
+
+    <style>
+ 
+
+        body { font-family: Arial, sans-serif; }
+
+        .hidden { display: none; }
+
+        #result { margin-top: 20px; }
+
+        #timer { font-size: 20px; color: red; font-weight: bold; } /* زيادة سمك الخط */
+
+        h2 { font-size: 22px; font-weight: bold; color: #000000; } /* تغيير اللون إلى الأسود وزيادة السُمك */
+
+        label { font-size: 18px; font-weight: bold; color: #333333; } /* زيادة سمك الخط وتحسين اللون */
+
+        #timer { font-size: 20px; color: red; }
+
+        h2 { font-size: 22px; }
+
+        label { font-size: 18px; }
+
+        .correct { font-weight: bold; color: red; }
+
+        /* CSS لتحريك الزر */
+
+        #next-button {
+
+            position: absolute; /* يسمح بتحديد الموقع */
+
+            left: 20px; /* المسافة من الجانب الأيسر */
+
+            bottom: 20px; /* المسافة من الأسفل */
+
+            padding: 10px 20px; /* لتعديل حجم الزر */
+
+        }
+
+        #popup {
+
+    position: fixed;
+
+    top: 30%;
+
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    background-color: #fff;
+
+    border: 1px solid #ccc;
+
+    padding: 20px;
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+    z-index: 1000;
+
+    text-align: center;
+
+    display: none;
+
+}
+
+#popup button {
+
+    margin-top: 10px;
+
+    padding: 5px 10px;
+
+    background-color: red;
+
+    color: white;
+
+    border: none;
+
+    cursor: pointer;
+
+}
+
+#popup button:hover {
+
+    background-color: darkred;
+
+}
+
+    </style>
+
+</head>
+
+<body>
+
+    <h2 class="header-one">
+
+        التدريب علي اختبارات الجهاز المركزى
+
+
+   
+
+    </div>
+<div id="login-container">
+
+    <label for="password">أدخل كلمة المرور:</label>
+
+    <input id="password" type="password" />
+
+    <br /><br />
+
+    <label for="duration">حدد مدة الاختبار (بالدقائق):</label>
+
+    <input id="duration" min="1" type="number" value="5" />
+<br /><br />
+    <label for="questionCount">حدد عدد الأسئلة:</label>
+    <input id="questionCount" min="1" max="55" type="number" value="20" />
+<br /><br />
+
+    <button onclick="checkPassword()">دخول</button>
+
+</div>
+
+<div class="hidden" id="quiz">
+
+    <div id="timer">5:00</div>
+
+    <div id="question-info">السؤال 1 من 20</div>
+
+    <form id="quizForm">
+
+        <div id="question-container"></div>
+      <br><br><br>
+
+        <button id="next-button" onclick="nextQuestion()" type="button">التالي</button>
+
+    </form>
+
+</div>
+
+<div class="hidden" id="result"></div>
+
+<div id="popup" class="hidden">
+
+    <p>
+        هذا النموذج خاص بجروب المشتركين ويتم فتحه مجانا في وقت الفجر 
+    </p>
+
+    <button onclick="closePopup()">إغلاق</button>
+
+</div>
+
+<script>
+
+     const questions =[
+   
+ {
+    "question": "مَنْ الشاعِرُ الجاهِلِيُّ الَّذِي كَانَتْ تُضْرَبُ لَهُ \"قُبَّةٌ مِنْ أَدَمٍ\" فِي سُوقِ عُكَاظَ لِيَحْكُمَ بَيْنَ الشُّعَرَاءِ وَيُفاضِلَ بَيْنَ قَصَائِدِهِمْ؟",
+    "options": [
+      "امْرُؤُ القَيْسِ",
+      "النَّابِغَةُ الذِّبْيَانِيُّ",
+      "زُهَيْرُ بْنُ أَبِي سُلْمَى",
+      "طَرَفَةُ بْنُ العَبْدِ"
+    ],
+    "answer": "النَّابِغَةُ الذِّبْيَانِيُّ"
+  },
+  {
+    "question": "في قول الشاعر خليل مطران:\"شَاكٍ إِلى البَحْرِ اضْطِرَابَ خَوَاطِرِي ... فَيُجِيبُنِي بِرِيَاحِهِ الهَوْجَاءِ\"\nما الرُّكْنُ المَحْذُوفُ بَلاغِيّاً فِي بِدَايَةِ الشَّطْرِ الأَوَّلِ؟",
+    "options": [
+      "حَذْفُ المُسْنَدِ إِلَيْهِ (المُبْتَدَأ)",
+      "حَذْفُ المُسْنَدِ (الخَبَر)"
+    ],
+    "answer": "حَذْفُ المُسْنَدِ إِلَيْهِ (المُبْتَدَأ)"
+  },
+  {
+    "question": "قال المتنبي: من يهن يسهل الهوان عليه...ما لجرح بميت إيلام ،ما نوع التشبيه؟",
+    "options": [
+      "تشبيه بليغ",
+      "تشبيه ضمني"
+    ],
+    "answer": "تشبيه ضمني"
+  },
+  {
+    "question": "تصغير كلمة (فاطمة)",
+    "options": [
+      "فايْطِمة",
+      "فُوَيْطِمة"
+    ],
+    "answer": "فُوَيْطِمة"
+  },
+  {
+    "question": "مَا اسْمُ الآلَةِ المَصُوغُ صِيَاغَةً صَرْفِيَّةً صَحِيحَةً مِنَ الفِعْلِ (عَزَقَ)؟",
+    "options": [
+      "مَعْزَقَة (بفتح الميم)",
+      "مِعْزَقَة (بكسر الميم)"
+    ],
+    "answer": "مِعْزَقَة (بكسر الميم)"
+  },
+  {
+    "question": "يَنْقَسِمُ المَجَازُ اللُّغَوِيُّ إِلَى قِسْمَيْنِ ، هُمَا:",
+    "options": [
+      "المَجَازُ المُرْسَلُ وَالاسْتِعَارَةُ",
+      "المَجَازُ العَقْلِيُّ وَالمَجَازُ المُرْسَلُ"
+    ],
+    "answer": "المَجَازُ المُرْسَلُ وَالاسْتِعَارَةُ"
+  },
+  {
+    "question": "ما هو التعريف الصحيح لـ طباق السلب؟",
+    "options": [
+      "الجمع بين لفظين متضادين في المعنى كلاهما مثبتان (مثل: العلم والجهل)",
+      "الجمع بين كلمتين تتفقان في المعنى وتختلفان في الإيجاب والنفي، أو الأمر والنهي"
+    ],
+    "answer": "الجمع بين كلمتين تتفقان في المعنى وتختلفان في الإيجاب والنفي، أو الأمر والنهي"
+  },
+  {
+    "question": "ما التصغير الصحيح لكلمة (قاضٍ / القاضي)؟",
+    "options": [
+      "قُضَيْض",
+      "قُضَيْضي",
+      "قُوَيْضٍ"
+    ],
+    "answer": "قُوَيْضٍ"
+  },
+  {
+    "question": "ما ينقسم غرض المدح إلى قسمين، هما:",
+    "options": [
+      "مدح حقيقي ومدح مجازي",
+      "مدح صادق ومدح كاذب",
+      "مدح مباشر ومدح غير مباشر"
+    ],
+    "answer": "مدح صادق ومدح كاذب"
+  },
+  {
+    "question": "يُعدّ الشاعر الجاهلي عروة بن الورد نموذجاً فريداً بين شعراء الصعاليك، ولُقِّب بـ «عروة الصعاليك»؛ وسبب ذلك",
+    "options": [
+      "كان أسرع الصعاليك عَدْواً على قدميه ولا تُدركه الخيل.",
+      "كان يجمع الفقراء والضعفاء فيُطعمهم ويحميهم حتى يستغنوا وتزول أزمتهم."
+    ],
+    "answer": "كان يجمع الفقراء والضعفاء فيُطعمهم ويحميهم حتى يستغنوا وتزول أزمتهم."
+  }
+]
+  
+    let currentQuestion = 0;
+
+    let score = 0;
+
+    let timer;
+
+    let timeLeft;
+
+    let userAnswers = [];
+
+ 
+
+    function closePopup() {
+
+        const popup = document.getElementById("popup");
+
+        popup.style.display = "none";
+
+    }
+
+    function showPopup() {
+
+    const popup = document.getElementById("popup");
+
+    popup.style.display = "block";
+
+}
+
+  function checkPassword() {
+    const passwordInput = document.getElementById("password").value;
+    const durationInput = parseInt(document.getElementById("duration").value) || 10;
+    const questionCountInput = parseInt(document.getElementById("questionCount").value) || questions.length; // استرجاع عدد الأسئلة المحدد
+
+    timeLeft = durationInput * 60;
+
+    if (passwordInput === "099") {
+        document.getElementById("login-container").classList.add("hidden");
+        document.getElementById("quiz").classList.remove("hidden");
+        document.getElementById("result").classList.add("hidden");
+
+        // خلط الأسئلة وتحديد العدد المطلوب
+        const shuffledQuestions = [...questions].sort(() => Math.random() - 0.5).slice(0, questionCountInput);
+        questions.length = 0;
+        questions.push(...shuffledQuestions);
+
+        loadQuestion();
+        startTimer();
+    } else {
+        showPopup(); // عرض النافذة المنبثقة في حالة كلمة مرور خاطئة
+    }
+}
+    function loadQuestion() {
+
+        const questionContainer = document.getElementById("question-container");
+
+      questionContainer.innerHTML = `
+    <h2>${questions[currentQuestion].question}</h2>
+    ${questions[currentQuestion].options.map((option) => `
+        <label>
+            <input type="radio" name="option" value="${option}">
+            ${option === questions[currentQuestion].answer ? option : option}  <!-- تم إزالة الفئة .correct هنا -->
+        </label><br>
+    `).join('')}
+`;
+
+        document.getElementById("question-info").textContent = `السؤال ${currentQuestion + 1} من ${questions.length}`;
+
+    }
+
+function removeDiacritics(text) {
+    // إزالة التشكيل باستخدام regex
+    return text.normalize("NFD").replace(/[\u064B-\u0652]/g, "").replace(/\s+/g, " ").trim();
+}
+
+    function nextQuestion() {
+
+        const selectedOption = document.querySelector('input[name="option"]:checked');
+
+        if (selectedOption) {
+
+            const answer = selectedOption.value;
+
+            userAnswers[currentQuestion] = answer;
+
+            if (removeDiacritics(answer) === removeDiacritics(questions[currentQuestion].answer)) {
+
+                score++;
+
+            }
+
+            currentQuestion++;
+
+            if (currentQuestion < questions.length) {
+
+                loadQuestion();
+
+            } else {
+
+                showResult();
+
+            }
+
+        } else {
+
+            alert("يرجى اختيار إجابة.");
+
+        }
+
+    }
+
+    function showResult() {
+
+        clearInterval(timer);
+
+        const resultDiv = document.getElementById("result");
+
+        resultDiv.innerHTML = `<h2>نتيجتك: ${score} من ${questions.length}</h2>`;
+
+        const incorrectAnswers = [];
+
+        const correctAnswers = [];
+
+        const timeoutQuestions = [];
+
+        questions.forEach((q, index) => {
+
+            const userAnswer = userAnswers[index];
+
+            if (userAnswer === undefined) {
+
+                timeoutQuestions.push(q.question);
+
+            } else if (removeDiacritics(userAnswer) === removeDiacritics(q.answer)) {
+
+                correctAnswers.push({ question: q.question, userAnswer: userAnswer });
+
+            } else {
+
+                incorrectAnswers.push({ question: q.question, correctAnswer: q.answer, userAnswer: userAnswer });
+
+            }
+
+        });
+
+        if (correctAnswers.length) {
+
+            resultDiv.innerHTML += `<h3>الإجابات الصحيحة:</h3><ul>${correctAnswers.map(item => `<li style="color: black;">${item.question} - إجابتك: <span style="color: green;">${item.userAnswer}</span></li>`).join('')}</ul>`;
+
+        }
+
+        if (incorrectAnswers.length) {
+
+            resultDiv.innerHTML += `<h3>الإجابات الخاطئة:</h3><ul>${incorrectAnswers.map(item => `<li style="color: black;">${item.question} - إجابتك: <span style="color: red;">${item.userAnswer}</span> - <span style="color: green;">الإجابة الصحيحة: ${item.correctAnswer}</span></li>`).join('')}</ul>`;
+
+        }
+
+        if (timeoutQuestions.length) {
+
+            resultDiv.innerHTML += `<h3>الأسئلة التي لم تجب عليها بسبب انتهاء الوقت:</h3><p>${timeoutQuestions.join(', ')}</p>`;
+
+        }
+
+        resultDiv.classList.remove("hidden");
+
+        document.getElementById("quiz").classList.add("hidden");
+
+    }
+
+    function startTimer() {
+
+        timer = setInterval(() => {
+
+            timeLeft--;
+
+            const minutes = Math.floor(timeLeft / 60);
+
+            const seconds = timeLeft % 60;
+
+            document.getElementById("timer").textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+            if (timeLeft <= 0) {
+
+                clearInterval(timer);
+
+                showResult();
+
+            }
+
+        }, 1000);
+
+    }
+
+    // إضافة مستمع حدث "Enter" هنا
+
+    document.getElementById("quizForm").addEventListener("keypress", function(event) {
+
+        if (event.key === "Enter") {
+
+            event.preventDefault(); // لمنع السلوك الافتراضي
+
+            nextQuestion(); // الانتقال للسؤال التالي
+
+        }
+
+    });
+
+</script>
+
+</body>
+
+</html>
